@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { ExternalData, Prisma } from '@prisma/client';
+
+import { PrismaService } from '../prisma.service';
 import { CreateDatumDto } from './dto/create-datum.dto';
 import { UpdateDatumDto } from './dto/update-datum.dto';
 
 @Injectable()
 export class DataService {
-  create(createDatumDto: CreateDatumDto) {
-    return ;
+  constructor(private prisma: PrismaService) {}
+
+  create(data: Prisma.ExternalDataCreateInput): Promise<ExternalData> {
+    return this.prisma.externalData.create({
+      data,
+    });
   }
 
-  findAll() {
-    return `This action returns all data`;
+  findAll(): Promise<ExternalData[]> {
+    return this.prisma.externalData.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} datum`;
+  findOne(
+    id: Prisma.ExternalDataWhereUniqueInput,
+  ): Promise<ExternalData | null> {
+    return this.prisma.externalData.findUnique({
+      where: id,
+    });
   }
 
-  update(id: number, updateDatumDto: UpdateDatumDto) {
-    return `This action updates a #${id} datum`;
+  update(params: {
+    id: Prisma.ExternalDataWhereUniqueInput;
+    data: Prisma.ExternalDataUpdateInput;
+  }): Promise<ExternalData> {
+    const { data, id } = params;
+
+    return this.prisma.externalData.update({
+      data,
+      where: id,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} datum`;
+  remove(id: Prisma.ExternalDataWhereUniqueInput): Promise<ExternalData> {
+    return this.prisma.externalData.delete({
+      where: id,
+    });
   }
 }

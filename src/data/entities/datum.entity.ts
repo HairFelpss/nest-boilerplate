@@ -1,3 +1,3 @@
-export class Datum {
+export class DataEnum {
   ok: string;
 }

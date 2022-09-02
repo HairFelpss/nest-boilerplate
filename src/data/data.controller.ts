@@ -10,34 +10,40 @@ import {
 import { DataService } from './data.service';
 import { CreateDatumDto } from './dto/create-datum.dto';
 import { UpdateDatumDto } from './dto/update-datum.dto';
-import { Datum } from './entities/datum.entity';
+import { ExternalData as ExternalDataModel } from '@prisma/client';
 
 @Controller('data')
 export class DataController {
   constructor(private readonly dataService: DataService) {}
 
   @Post()
-  create(@Body() createDatumDto: CreateDatumDto) {
+  create(@Body() createDatumDto: CreateDatumDto): Promise<ExternalDataModel> {
     return this.dataService.create(createDatumDto);
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<ExternalDataModel[]> {
     return this.dataService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dataService.findOne(+id);
+  findOne(@Param('id') id: number): Promise<ExternalDataModel> {
+    return this.dataService.findOne({ id });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDatumDto: UpdateDatumDto) {
-    return this.dataService.update(+id, updateDatumDto);
+  update(
+    @Param('id') id: any,
+    @Body() updateDatumDto: UpdateDatumDto,
+  ): Promise<ExternalDataModel> {
+    return this.dataService.update({
+      id,
+      data: updateDatumDto,
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dataService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.dataService.remove({ id });
   }
 }
