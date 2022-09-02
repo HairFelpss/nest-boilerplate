@@ -7,18 +7,28 @@ import { PrismaService } from '../prisma.service';
 export class DataService {
   constructor(private prisma: PrismaService) {}
 
-  create(data: Prisma.ExternalDataCreateInput): Promise<ExternalData> {
-    const { rig_name, system, variable } = data;
-
-    return this.prisma.externalData.create({
+  async create(
+    externalData: Prisma.ExternalDataCreateInput,
+  ): Promise<ExternalData> {
+    const externalDataResponse = await this.prisma.externalData.create({
       data: {
-        rig_name,
-        system,
-        variable: {
-          set: variable.map((variable) => ({ ...variable })),
-        },
+        rig_name: externalData.rig_name,
+        system: externalData.system,
       },
     });
+    console.log(`Created with id: ${externalDataResponse.id}`);
+    console.log('external data => ', externalData);
+    /*const variables = externalData.variable;
+    for (const data of variables) {
+      this.prisma.variable.create({
+        data: {
+          ...data,
+          externalDataId: externalDataResponse.id,
+        },
+      });
+    }*/
+
+    return externalDataResponse;
   }
 
   findAll(): Promise<ExternalData[]> {
