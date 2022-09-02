@@ -9,17 +9,15 @@ import {
 } from '@nestjs/common';
 import { DataService } from './data.service';
 import { ExternalData as ExternalDataModel } from '@prisma/client';
+import { CreateDatumDto } from './dto/create-data.dto';
 
 @Controller('data')
 export class DataController {
   constructor(private readonly dataService: DataService) {}
 
   @Post()
-  create(
-    @Body() createDatumDto: ExternalDataModel,
-  ): Promise<ExternalDataModel> {
-    console.log('createDatumDto => ', createDatumDto);
-    return this.dataService.create(createDatumDto);
+  create(@Body() createData: CreateDatumDto): Promise<ExternalDataModel> {
+    return this.dataService.create(createData);
   }
 
   @Get()
@@ -28,7 +26,7 @@ export class DataController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number): Promise<ExternalDataModel> {
+  findOne(@Param('id') id: string): Promise<ExternalDataModel> {
     return this.dataService.findOne({ id });
   }
 
@@ -44,7 +42,7 @@ export class DataController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id') id: string) {
     return this.dataService.remove({ id });
   }
 }

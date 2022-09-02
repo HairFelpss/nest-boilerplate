@@ -2,10 +2,26 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 model ExternalData {
-  id    Int     @default(autoincrement()) @id
-  rig_name String
-  system String
-  variable Json[]
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  rig_name  String
+  system    String
+  Variable  Variable[]
+}
+
+model Variable {
+  id             String        @id @default(uuid())
+  timestamp      DateTime
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  name           String
+  value          String
+  uom            String
+  ExternalData   ExternalData? @relation(fields: [externalDataId], references: [id])
+  externalDataId String?
+
+  @@map("variable")
 }
 
 datasource db {
@@ -14,6 +30,6 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "darwin", "darwin-arm64"]
 }

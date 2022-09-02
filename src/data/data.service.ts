@@ -8,8 +8,16 @@ export class DataService {
   constructor(private prisma: PrismaService) {}
 
   create(data: Prisma.ExternalDataCreateInput): Promise<ExternalData> {
+    const { rig_name, system, variable } = data;
+
     return this.prisma.externalData.create({
-      data,
+      data: {
+        rig_name,
+        system,
+        variable: {
+          set: variable.map((variable) => ({ ...variable })),
+        },
+      },
     });
   }
 
