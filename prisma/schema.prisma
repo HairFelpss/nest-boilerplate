@@ -4,6 +4,7 @@
 model ExternalData {
   id    Int     @default(autoincrement()) @id
   rig_name String
+  system String
   variable Json[]
 }
 
@@ -14,4 +15,5 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin", "darwin-arm64"]
 }

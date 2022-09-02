@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ExternalData, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
-import { CreateDatumDto } from './dto/create-datum.dto';
-import { UpdateDatumDto } from './dto/update-datum.dto';
 
 @Injectable()
 export class DataService {

@@ -8,8 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { DataService } from './data.service';
-import { CreateDatumDto } from './dto/create-datum.dto';
-import { UpdateDatumDto } from './dto/update-datum.dto';
 import { ExternalData as ExternalDataModel } from '@prisma/client';
 
 @Controller('data')
@@ -17,7 +15,10 @@ export class DataController {
   constructor(private readonly dataService: DataService) {}
 
   @Post()
-  create(@Body() createDatumDto: CreateDatumDto): Promise<ExternalDataModel> {
+  create(
+    @Body() createDatumDto: ExternalDataModel,
+  ): Promise<ExternalDataModel> {
+    console.log('createDatumDto => ', createDatumDto);
     return this.dataService.create(createDatumDto);
   }
 
@@ -34,7 +35,7 @@ export class DataController {
   @Patch(':id')
   update(
     @Param('id') id: any,
-    @Body() updateDatumDto: UpdateDatumDto,
+    @Body() updateDatumDto: ExternalDataModel,
   ): Promise<ExternalDataModel> {
     return this.dataService.update({
       id,
